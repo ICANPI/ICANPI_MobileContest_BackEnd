@@ -1,6 +1,8 @@
-# Node Template
-손쉽게 서버를 제작해보세요!
+# Node DanZam
 
+ERD : https://dbdiagram.io/d/5e9ea0e839d18f5553fdf126
+
+명세서 : https://unitaemin.run.goorm.io/danzam/docs/
 
 # .env
 PORT=
