@@ -1,0 +1,31 @@
+import { Request, Response, NextFunction, Router } from "express";
+import * as jwt from "jsonwebtoken";
+
+class Controller {
+  protected router: Router = Router();
+
+  public Response(
+    res: Response,
+    status: number,
+    message: string,
+    data?: object
+  ) {
+    return res
+      .status(status)
+      .json(Object.assign({ status: status }, { message: message }, data))
+      .end();
+  }
+  public CheckBlank(...data: any): boolean {
+    if (
+      !data.every((e) => {
+        return e != null && e != "";
+      })
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+export default Controller;
