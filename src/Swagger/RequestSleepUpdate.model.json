@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "required": [
+      "day"
+    ],
+    "properties": {
+      "day": {
+        "type": "string"
+      }
+    },
+    "example": {
+      "day": "2020-06-20"
+    }
+  }
