@@ -61,6 +61,7 @@ class AuthController extends Controller {
               await result.save();
               return super.Response(res, 200, "로그인에 성공했습니다", {
                 token: token,
+                success: true
               });
             } else {
               return super.Response(res, 400, "비밀번호가 일치하지않습니다");
@@ -111,7 +112,7 @@ class AuthController extends Controller {
       });
       console.log(result.success, result.mes);
       if (result.success) {
-        return super.Response(res, 200, "회원가입 성공", { mes: result.mes });
+        return super.Response(res, 200, "회원가입 성공", { mes: result.mes, success: true });
       } else {
         return super.Response(res, 400, "회원가입 실패", { mes: result.mes });
       }
@@ -156,7 +157,81 @@ class AuthController extends Controller {
           type.indexOf("password") != -1 ? typeList.push({'password':'**********'}):''
           type.indexOf("email") != -1 ? typeList.push({'email':result.email}):''
           type.indexOf("username") != -1 ? typeList.push({'username':result.username}):''
-          return super.Response(res, 200, "성공적으로 전달 되었습니다", { data: typeList });
+          return super.Response(res, 200, "성공적으로 전달 되었습니다", { data: typeList, success: true });
+        } else {
+          return super.Response(res, 400, "아이디가 존재하지 않습니다");
+        }
+      }); 
+    } catch (e) {
+      return next(e);
+    }
+  }  
+ /**
+   * @swagger
+   * /auth/update_info:
+   *   put:
+   *     summary: 사용자의 정보를 수정합니다. (수정은 하나의 속성밖에 할 수 없습니다.)
+   *     tags:
+   *	     - Auth
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - in: body
+   *         name: body
+   *         type: object
+   *         schema:
+   *           $ref: "#/definitions/RequestUpdateInfo"
+   *       - in: header
+   *         name: Authorization
+   *         type: string
+   *         schema:
+   *           $ref: "#/definitions/Token"
+   *     responses:
+   *       200:
+   *         schema:
+   *           $ref: "#/definitions/ResponseUpdateInfo"
+   */
+  public async UpdateInfo(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { type,text } = req.body;
+      let decoded:any = jwt.verify(req.headers['authorization'].split('Bearer ')[1], process.env.JWT_SECRET_KEY)
+      User.findOne({ id: decoded.id }, async (err, result) => {
+        if (err) throw err;
+        if (result != null) {
+          if (super.CheckBlank(type,text)) {
+            return super.Response(res, 400, "빈칸을 모두 입력해 주세요.");
+          }
+          
+          if(type == "id"){
+            if (RegExp.Id(text)) {
+              return super.Response(res, 400, "올바른 형식이 아닙니다.");
+            }
+            if (await User.findOne({ id: text })) {
+              return super.Response(res, 400, "이미 존재하는 아이디 입니다.");
+            }
+            result.id = text;
+            result.save();
+            console.log("아이디 변경 성공")
+          }
+          else if(type == "password"){
+            if (RegExp.Pwd(text)) {
+              return super.Response(res, 400, "올바른 형식이 아닙니다.");
+            }
+            bcrypt.hash(text, null, null, async function (err, hash) {
+              result.password = hash;
+              result.save();
+              console.log("비밀번호 변경 성공")
+            })
+          }
+          else if(type == "username"){
+            if (RegExp.Username(text)) {
+              return super.Response(res, 400, "올바른 형식이 아닙니다.");
+            }
+            result.username = text;
+            result.save();
+            console.log("유저닉네임 변경 성공")
+          }
+          return super.Response(res, 200, "성공적으로 업데이트 했습니다", { success : true });
         } else {
           return super.Response(res, 400, "아이디가 존재하지 않습니다");
         }
