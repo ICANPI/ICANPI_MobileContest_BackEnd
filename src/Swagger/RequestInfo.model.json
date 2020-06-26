@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "required": [
+    ],
+    "properties": {
+      "type": {
+        "type": "array"
+      }
+    },
+    "example": {
+      "type": [ "id", "password", "email", "username" ]
+    }
+  }

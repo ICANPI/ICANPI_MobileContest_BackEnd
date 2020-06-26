@@ -14,6 +14,6 @@
   },
   "example": {
     "id": "id",
-	"password": "password"
+	  "password": "password"
   }
 }

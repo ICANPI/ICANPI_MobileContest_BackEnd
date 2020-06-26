@@ -20,6 +20,10 @@ swaggerSpec.definitions.ResponseSignin = require('../Swagger/ResponseSignin.mode
 swaggerSpec.definitions.ResponseSignup = require('../Swagger/ResponseSignup.model.json');
 swaggerSpec.definitions.RequestSleepUpdate = require('../Swagger/RequestSleepUpdate.model.json');
 swaggerSpec.definitions.ResponseSleepUpdate = require('../Swagger/ResponseSleepUpdate.model.json');
+
+swaggerSpec.definitions.RequestInfo = require('../Swagger/RequestInfo.model.json');
+swaggerSpec.definitions.ResponseInfo = require('../Swagger/ResponseInfo.model.json');
+
 swaggerSpec.definitions.Token = require('../Swagger/Token.model.json');
 
 
