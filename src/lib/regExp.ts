@@ -20,6 +20,26 @@ class RegExp {
     }
     return true;
   }
+  public Id(
+    id: string,
+  ): boolean {
+     return  this.id.test(id) == true ? false: true
+  }
+  public Pwd(
+    password: string,
+  ): boolean {
+     return  this.password.test(password) == true ? false: true
+  }
+  public Email(
+    email: string,
+  ): boolean {
+     return  this.email.test(email) == true ? false: true
+  }
+  public Username(
+    username: string,
+  ): boolean {
+     return  this.username.test(username) == true ? false: true
+  }
   public SignIn(id: string, password: string): boolean {
     if (this.id.test(id) && this.password.test(password)) {
       return false;
