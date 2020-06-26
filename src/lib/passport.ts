@@ -18,8 +18,7 @@ class Passport {
             return User.loginAuthentication(jwtPayload)
               .then((user) => {
                 if (user) {
-                  console.log("test", user);
-                  done(null, user);
+                  return done(null, user);
                 }
                 return done(null, false);
               })
@@ -27,7 +26,7 @@ class Passport {
                 return done(err);
               });
           } catch (err) {
-            done(err);
+            return done(err);
           }
         }
       )
