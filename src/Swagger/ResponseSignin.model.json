@@ -11,6 +11,7 @@
   "example": {
     "status": 200,
     "message": "로그인에 성공했습니다",
-    "token": "토큰정보"
+    "token": "토큰정보",
+    "success": true
   }
 }

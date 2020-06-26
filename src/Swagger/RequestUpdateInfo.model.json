@@ -1,0 +1,19 @@
+{
+    "type": "object",
+    "required": [
+        "type",
+        "text"
+    ],
+    "properties": {
+      "type": {
+        "type": "string"
+      },
+      "text": {
+        "type": "string"
+      }
+    },
+    "example": {
+      "type": "id",
+      "text": "onnu0802"
+    }
+  }

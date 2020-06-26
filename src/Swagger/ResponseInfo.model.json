@@ -11,6 +11,7 @@
     "example": {
       "status": 200,
       "message": "유저 정보를 성공적으로 가져왔습니다",
-      "data": [{"name":"염태민", "email":"onnu0802@naver.com"}]
+      "data": [{"name":"염태민", "email":"onnu0802@naver.com"}],
+      "success": true
     }
   }
