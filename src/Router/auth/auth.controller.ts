@@ -3,6 +3,7 @@ import * as bcrypt from "bcrypt-nodejs";
 import Controller from "../../lib/controller";
 import RegExp from "../../lib/regExp";
 import User from "../../model/user";
+import * as jwt from "jsonwebtoken";
 
 class AuthController extends Controller {
   constructor() {
@@ -118,6 +119,53 @@ class AuthController extends Controller {
       return next(e);
     }
   }
+ /**
+   * @swagger
+   * /auth/info:
+   *   post:
+   *     summary: 사용자의 정보를 가져옵니다.
+   *     tags:
+   *	     - Auth
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - in: body
+   *         name: body
+   *         type: object
+   *         schema:
+   *           $ref: "#/definitions/RequestInfo"
+   *       - in: header
+   *         name: Authorization
+   *         type: string
+   *         schema:
+   *           $ref: "#/definitions/Token"
+   *     responses:
+   *       200:
+   *         schema:
+   *           $ref: "#/definitions/ResponseInfo"
+   */
+  public async Info(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { type } = req.body;
+      let decoded:any = jwt.verify(req.headers['authorization'].split('Bearer ')[1], process.env.JWT_SECRET_KEY)
+      User.findOne({ id: decoded.id }, (err, result) => {
+        if (err) throw err;
+        if (result != null) {
+          let typeList:any = []
+          type.indexOf("id") != -1 ? typeList.push({'id':result.id}):''
+          type.indexOf("password") != -1 ? typeList.push({'password':'**********'}):''
+          type.indexOf("email") != -1 ? typeList.push({'email':result.email}):''
+          type.indexOf("username") != -1 ? typeList.push({'username':result.username}):''
+          return super.Response(res, 200, "성공적으로 전달 되었습니다", { data: typeList });
+        } else {
+          return super.Response(res, 400, "아이디가 존재하지 않습니다");
+        }
+      }); 
+    } catch (e) {
+      return next(e);
+    }
+  }  
+  
   public Test(req: Request, res: Response, next: NextFunction) {
     try {
       console.log("test");
