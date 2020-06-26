@@ -7,16 +7,10 @@ const options = {
             title: 'DanZam',
             description: 'DanZam API'
         },
-        host: 'unitaemin.run.goorm.io/danzam',
-        basePath: '/'
-        // securityDefinitions: {
-        //     type: 'apiKey',
-        //     name: 'Authorization',
-        //     scheme: 'Bearer',
-        //     in: 'header'
-        // },
+        host: 'localhost:4040',
+        basePath: '/',
     },
-    apis: ['**/*.ts']
+    apis: ['**/*.ts'],
 };
 
 const swaggerSpec = swaggerJsDoc(options);
@@ -24,6 +18,9 @@ swaggerSpec.definitions.RequestSignin = require('../Swagger/RequestSignin.model.
 swaggerSpec.definitions.RequestSignup = require('../Swagger/RequestSignup.model.json');
 swaggerSpec.definitions.ResponseSignin = require('../Swagger/ResponseSignin.model.json');
 swaggerSpec.definitions.ResponseSignup = require('../Swagger/ResponseSignup.model.json');
+swaggerSpec.definitions.RequestSleepUpdate = require('../Swagger/RequestSleepUpdate.model.json');
+swaggerSpec.definitions.ResponseSleepUpdate = require('../Swagger/ResponseSleepUpdate.model.json');
+swaggerSpec.definitions.Token = require('../Swagger/Token.model.json');
 
 
 export { swaggerSpec };

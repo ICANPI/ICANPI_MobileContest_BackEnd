@@ -32,12 +32,13 @@ class App {
   private routerInit() {
     this.app.use(Router);
 	this.app.get("/swagger.json", function(req, res) {
-    	res.setHeader("Content-Type", "application/json");
+      res.setHeader("Content-Type", "application/json");
+      console.log("emfdjdha")
     	res.send(swaggerSpec);
 	});
 	var options = {
     	swaggerOptions: {
-      		url: [`https://unitaemin.run.goorm.io/danzam/swagger.json`]
+      		url: [`http://localhost:4040/swagger.json`]
     	}
 	};
 	this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(null, options));
