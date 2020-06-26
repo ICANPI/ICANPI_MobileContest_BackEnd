@@ -7,6 +7,7 @@ import Passport from "../../lib/passport";
 router.post("/test", Passport.authenticate(), AuthController.Test);
 router.post("/signin", AuthController.SignIn);
 router.post("/signup", AuthController.SignUp);
+router.post("/info", AuthController.Info);
 router.get("/",AuthController.Auth);
 
 export default router;

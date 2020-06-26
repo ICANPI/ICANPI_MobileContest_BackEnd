@@ -32,7 +32,7 @@ class AuthController extends Controller {
    */
   public UpdateSleepTime(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log("UpdateSleepTime",req.body.day);
+      console.log("UpdateSleepTime",req.body.day,req.headers['authorization'].split('Bearer ')[1]);
       return super.Response(res, 200, "테스트");
     } catch (e) {
       return next(e);
