@@ -31,19 +31,19 @@ class App {
   }
   private routerInit() {
     this.app.use(Router);
-	this.app.get("/swagger.json", function(req, res) {
+    this.app.get("/swagger.json", function (req, res) {
       res.setHeader("Content-Type", "application/json");
-      console.log("emfdjdha")
-    	res.send(swaggerSpec);
-	});
-	var options = {
-    	swaggerOptions: {
-      		url: [`http://localhost:4040/swagger.json`]
-    	}
-	};
-	this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(null, options));
+      res.send(swaggerSpec);
+    });
+    var options = {
+      swaggerOptions: {
+        // url: [`http://localhost:4040/swagger.json`]
+        url: [`https://unitaemin.run.goorm.io/danzam/swagger.json`],
+      },
+    };
+    this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(null, options));
 
-	this.app.use(this.autoErrorHandler());
+    this.app.use(this.autoErrorHandler());
   }
   private autoErrorHandler() {
     return (
