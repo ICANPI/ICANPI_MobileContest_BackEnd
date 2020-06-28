@@ -37,8 +37,8 @@ class App {
     });
     var options = {
       swaggerOptions: {
-        // url: [`http://localhost:4040/swagger.json`]
-        url: [`https://unitaemin.run.goorm.io/danzam/swagger.json`],
+        url: [`http://localhost:4040/swagger.json`],
+        // url: [`https://unitaemin.run.goorm.io/danzam/swagger.json`],
       },
     };
     this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(null, options));

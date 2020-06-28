@@ -67,7 +67,6 @@ userSchema.statics.getToken = function (data: UserDocument): Promise<any> {
       return resolve(
         jwt.sign(
           {
-            id: data.id,
             email: data.email,
           },
           process.env.JWT_SECRET_KEY || "USER_SECRET",

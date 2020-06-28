@@ -33,7 +33,6 @@ class Passport {
     );
   }
   public authenticate(session: boolean = false): Handler {
-    console.log("dd");
     return passport.authenticate("jwt", {
       failWithError: true,
       session: session,

@@ -61,7 +61,7 @@ class AuthController extends Controller {
               await result.save();
               return super.Response(res, 200, "로그인에 성공했습니다", {
                 token: token,
-                success: true
+                success: true,
               });
             } else {
               return super.Response(res, 400, "비밀번호가 일치하지않습니다");
@@ -112,7 +112,10 @@ class AuthController extends Controller {
       });
       console.log(result.success, result.mes);
       if (result.success) {
-        return super.Response(res, 200, "회원가입 성공", { mes: result.mes, success: true });
+        return super.Response(res, 200, "회원가입 성공", {
+          mes: result.mes,
+          success: true,
+        });
       } else {
         return super.Response(res, 400, "회원가입 실패", { mes: result.mes });
       }
@@ -120,7 +123,7 @@ class AuthController extends Controller {
       return next(e);
     }
   }
- /**
+  /**
    * @swagger
    * /auth/info:
    *   post:
@@ -148,25 +151,37 @@ class AuthController extends Controller {
   public async Info(req: Request, res: Response, next: NextFunction) {
     try {
       const { type } = req.body;
-      let decoded:any = jwt.verify(req.headers['authorization'].split('Bearer ')[1], process.env.JWT_SECRET_KEY)
-      User.findOne({ id: decoded.id }, (err, result) => {
+      let decoded: any = jwt.verify(
+        req.headers["authorization"].split("Bearer ")[1],
+        process.env.JWT_SECRET_KEY
+      );
+      User.findOne({ email: decoded.email }, (err, result) => {
         if (err) throw err;
         if (result != null) {
-          let typeList:any = []
-          type.indexOf("id") != -1 ? typeList.push({'id':result.id}):''
-          type.indexOf("password") != -1 ? typeList.push({'password':'**********'}):''
-          type.indexOf("email") != -1 ? typeList.push({'email':result.email}):''
-          type.indexOf("username") != -1 ? typeList.push({'username':result.username}):''
-          return super.Response(res, 200, "성공적으로 전달 되었습니다", { data: typeList, success: true });
+          let typeList: any = [];
+          type.indexOf("id") != -1 ? typeList.push({ id: result.id }) : "";
+          type.indexOf("password") != -1
+            ? typeList.push({ password: "**********" })
+            : "";
+          type.indexOf("email") != -1
+            ? typeList.push({ email: result.email })
+            : "";
+          type.indexOf("username") != -1
+            ? typeList.push({ username: result.username })
+            : "";
+          return super.Response(res, 200, "성공적으로 전달 되었습니다", {
+            data: typeList,
+            success: true,
+          });
         } else {
           return super.Response(res, 400, "아이디가 존재하지 않습니다");
         }
-      }); 
+      });
     } catch (e) {
       return next(e);
     }
-  }  
- /**
+  }
+  /**
    * @swagger
    * /auth/update_info:
    *   put:
@@ -193,16 +208,22 @@ class AuthController extends Controller {
    */
   public async UpdateInfo(req: Request, res: Response, next: NextFunction) {
     try {
-      const { type,text } = req.body;
-      let decoded:any = jwt.verify(req.headers['authorization'].split('Bearer ')[1], process.env.JWT_SECRET_KEY)
-      User.findOne({ id: decoded.id }, async (err, result) => {
+      const { type, text } = req.body;
+      let decoded: any = jwt.verify(
+        req.headers["authorization"].split("Bearer ")[1],
+        process.env.JWT_SECRET_KEY
+      );
+      User.findOne({ email: decoded.email }, async (err, result) => {
         if (err) throw err;
         if (result != null) {
-          if (super.CheckBlank(type,text)) {
+          if (super.CheckBlank(type, text)) {
             return super.Response(res, 400, "빈칸을 모두 입력해 주세요.");
           }
-          
-          if(type == "id"){
+          if (result.id == text) {
+            return super.Response(res, 400, "아이디를 다르게 작성해주세요.");
+          }
+
+          if (type == "id") {
             if (RegExp.Id(text)) {
               return super.Response(res, 400, "올바른 형식이 아닙니다.");
             }
@@ -211,36 +232,64 @@ class AuthController extends Controller {
             }
             result.id = text;
             result.save();
-            console.log("아이디 변경 성공")
-          }
-          else if(type == "password"){
+            console.log("아이디 변경 성공");
+            return super.Response(res, 200, "성공적으로 업데이트 했습니다", {
+              success: true,
+            });
+          } else if (type == "password") {
             if (RegExp.Pwd(text)) {
               return super.Response(res, 400, "올바른 형식이 아닙니다.");
             }
-            bcrypt.hash(text, null, null, async function (err, hash) {
-              result.password = hash;
-              result.save();
-              console.log("비밀번호 변경 성공")
-            })
-          }
-          else if(type == "username"){
+            bcrypt.compare(text, result.password, (err, value) => {
+              if (value == true) {
+                return super.Response(
+                  res,
+                  400,
+                  "비밀번호를 다르게 작성해주세요."
+                );
+              } else {
+                bcrypt.hash(text, null, null, (err, hash) => {
+                  result.password = hash;
+                  result.save();
+                  console.log("비밀번호 변경 성공~~~~");
+                  return super.Response(
+                    res,
+                    200,
+                    "성공적으로 업데이트 했습니다",
+                    {
+                      success: true,
+                    }
+                  );
+                });
+              }
+            });
+          } else if (type == "username") {
             if (RegExp.Username(text)) {
               return super.Response(res, 400, "올바른 형식이 아닙니다.");
             }
+            if (result.username == text) {
+              return super.Response(
+                res,
+                400,
+                "유지닉네임을 다르게 작성해주세요."
+              );
+            }
             result.username = text;
             result.save();
-            console.log("유저닉네임 변경 성공")
+            console.log("유저닉네임 변경 성공");
+            return super.Response(res, 200, "성공적으로 업데이트 했습니다", {
+              success: true,
+            });
           }
-          return super.Response(res, 200, "성공적으로 업데이트 했습니다", { success : true });
         } else {
           return super.Response(res, 400, "아이디가 존재하지 않습니다");
         }
-      }); 
+      });
     } catch (e) {
       return next(e);
     }
-  }  
-  
+  }
+
   public Test(req: Request, res: Response, next: NextFunction) {
     try {
       console.log("test");
