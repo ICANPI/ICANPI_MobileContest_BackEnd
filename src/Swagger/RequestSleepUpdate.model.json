@@ -1,14 +1,16 @@
 {
-    "type": "object",
-    "required": [
-      "day"
-    ],
-    "properties": {
-      "day": {
-        "type": "string"
-      }
+  "type": "object",
+  "required": ["day", "time"],
+  "properties": {
+    "day": {
+      "type": "string"
     },
-    "example": {
-      "day": "2020-06-20"
+    "time": {
+      "type": "string"
     }
+  },
+  "example": {
+    "day": "2020-06-20",
+    "time": "06:02:32"
   }
+}

@@ -231,7 +231,7 @@ class AuthController extends Controller {
               return super.Response(res, 400, "이미 존재하는 아이디 입니다.");
             }
             result.id = text;
-            result.save();
+            await result.save();
             console.log("아이디 변경 성공");
             return super.Response(res, 200, "성공적으로 업데이트 했습니다", {
               success: true,

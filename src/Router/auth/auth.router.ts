@@ -10,6 +10,6 @@ router.post("/signup", AuthController.SignUp);
 router.post("/info", Passport.authenticate(), AuthController.Info);
 router.put("/update_info", Passport.authenticate(), AuthController.UpdateInfo);
 
-router.get("/",AuthController.Auth);
+router.get("/", AuthController.Auth);
 
 export default router;

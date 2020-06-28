@@ -31,6 +31,14 @@ const userSchema = new Schema({
     type: Number,
     required: true,
   },
+  sleep_time: {
+    type: Array,
+    required: true,
+  },
+  achievements: {
+    type: Array,
+    required: true,
+  },
 });
 export interface IUser extends Document {
   id: string;
@@ -40,6 +48,8 @@ export interface IUser extends Document {
   lastLoginTime: string;
   createdTime: string;
   loginCount: string;
+  sleep_time: Array<any>;
+  achievements: Array<any>;
 }
 export interface UserCreate {
   id: string;
@@ -103,6 +113,8 @@ userSchema.statics.create = async function (data: UserCreate): Promise<Result> {
           lastLoginTime: createdTime,
           createdTime: createdTime,
           loginCount: 0,
+          sleep_time: [],
+          achievements: [],
         });
         user.save().then((data) => {
           return resolve({ success: true, mes: "회원가입을 성공 하였습니다." });
