@@ -169,8 +169,20 @@ class AuthController extends Controller {
           type.indexOf("username") != -1
             ? typeList.push({ username: result.username })
             : "";
+          let responseTypeObject: any = {};
+          typeList.forEach((element) => {
+            if (Object.keys(element)[0] == "id") {
+              responseTypeObject.id = element.id;
+            } else if (Object.keys(element)[0] == "password") {
+              responseTypeObject.password = element.password;
+            } else if (Object.keys(element)[0] == "email") {
+              responseTypeObject.email = element.email;
+            } else if (Object.keys(element)[0] == "username") {
+              responseTypeObject.username = element.username;
+            }
+          });
           return super.Response(res, 200, "성공적으로 전달 되었습니다", {
-            data: typeList,
+            data: responseTypeObject,
             success: true,
           });
         } else {

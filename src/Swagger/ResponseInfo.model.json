@@ -9,20 +9,12 @@
   "example": {
     "status": 200,
     "message": "유저 정보를 성공적으로 가져왔습니다",
-    "data": [
-      {
-        "id": "onnu0802"
-      },
-      {
-        "password": "**********"
-      },
-      {
-        "email": "onnu0802@naver.com"
-      },
-      {
-        "username": "염태민"
-      }
-    ],
+    "data": {
+      "id": "onnu0802",
+      "password": "**********",
+      "email": "onnu0802@naver.com",
+      "username": "염태민"
+    },
     "success": true
   }
 }
