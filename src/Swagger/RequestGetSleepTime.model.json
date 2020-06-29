@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "required": [],
+  "properties": {
+    "type": {
+      "type": "array"
+    },
+    "date": {
+      "type": "string"
+    }
+  },
+  "example": {
+    "type": ["day", "week", "month"],
+    "date": "2020-06-20"
+  }
+}
