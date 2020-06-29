@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import Controller from "../../lib/controller";
 import User from "../../model/user";
+import Achievements from "../../model/achievements";
+
 import * as jwt from "jsonwebtoken";
-import authController from "../auth/auth.controller";
-import { min } from "moment";
 let moment = require("moment"); // require
 
 class AuthController extends Controller {
@@ -105,6 +105,43 @@ class AuthController extends Controller {
 
           result.sleepTime = timeArray;
           result.save();
+          let number: number = 0;
+          let nowDay = moment();
+
+          for (let i = 0; i < 14; i++) {
+            // 체크하는 범위
+            result.sleepTime.forEach((element) => {
+              //일을 하나 꺼냄
+              console.log(
+                element.day,
+                nowDay.format("YYYY-MM-DD"),
+                element.data.hours
+              );
+              if (
+                i == 0 &&
+                element.day == nowDay.format("YYYY-MM-DD") &&
+                element.data.hours >= 7
+              ) {
+                console.log("7이상", nowDay.format("YYYY-MM-DD"));
+                number++;
+              } else if (
+                element.day == nowDay.format("YYYY-MM-DD") &&
+                element.data.hours >= 7
+              ) {
+                console.log("7이상", nowDay.format("YYYY-MM-DD"));
+                number++;
+              }
+            });
+
+            if (i + 1 != number) {
+              break;
+            }
+            nowDay.subtract(1, "days");
+          }
+          console.log(number);
+          // 갯수를 구했으니 수면시간 업적을 업데이트 해줘야한다
+          // Achievements.update("수면 시간","title",decoded.email,true)
+
           return super.Response(res, 200, "성공적으로 업데이트 했습니다", {
             success: true,
           });
@@ -139,6 +176,7 @@ class AuthController extends Controller {
    *         schema:
    *           $ref: "#/definitions/ResponseGetSleepTime"
    */
+
   public GetSleepTime(req: Request, res: Response, next: NextFunction) {
     try {
       const { type, date } = req.body;

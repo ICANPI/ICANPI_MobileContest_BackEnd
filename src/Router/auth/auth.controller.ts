@@ -5,7 +5,7 @@ import RegExp from "../../lib/regExp";
 import User from "../../model/user";
 import * as jwt from "jsonwebtoken";
 import Token from "../../model/token";
-import * as moment from "moment";
+import Achievements from "../../model/Achievements";
 class AuthController extends Controller {
   constructor() {
     super();
@@ -86,6 +86,55 @@ class AuthController extends Controller {
   }
   /**
    * @swagger
+   * /auth/signup:
+   *   post:
+   *     summary: 회원가입을 합니다.
+   *     tags:
+   *	     - Auth
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - in: body
+   *         name: body
+   *         type: object
+   *         schema:
+   *           $ref: "#/definitions/RequestSignup"
+   *     responses:
+   *       200:
+   *         schema:
+   *           $ref: "#/definitions/ResponseSignup"
+   */
+  public async SignUp(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id, password, email, username } = req.body;
+      if (super.CheckBlank(id, password, email, username)) {
+        return super.Response(res, 400, "빈칸을 모두 입력해 주세요.");
+      }
+      if (RegExp.SignUp(id, password, username, email)) {
+        return super.Response(res, 400, "올바른 형식이 아닙니다.");
+      }
+      await Achievements.create(email);
+      let result = await User.create({
+        id: id,
+        password: password,
+        email: email,
+        username: username,
+      });
+      console.log(result.success, result.mes);
+      if (result.success) {
+        return super.Response(res, 200, "회원가입 성공", {
+          mes: result.mes,
+          success: true,
+        });
+      } else {
+        return super.Response(res, 400, "회원가입 실패", { mes: result.mes });
+      }
+    } catch (e) {
+      return next(e);
+    }
+  }
+  /**
+   * @swagger
    * /auth/refresh:
    *   post:
    *     summary: access 토큰 갱신
@@ -124,54 +173,6 @@ class AuthController extends Controller {
           return super.Response(res, 400, "관련된 토큰이 없습니다.");
         }
       });
-    } catch (e) {
-      return next(e);
-    }
-  }
-  /**
-   * @swagger
-   * /auth/signup:
-   *   post:
-   *     summary: 회원가입을 합니다.
-   *     tags:
-   *	     - Auth
-   *     produces:
-   *       - application/json
-   *     parameters:
-   *       - in: body
-   *         name: body
-   *         type: object
-   *         schema:
-   *           $ref: "#/definitions/RequestSignup"
-   *     responses:
-   *       200:
-   *         schema:
-   *           $ref: "#/definitions/ResponseSignup"
-   */
-  public async SignUp(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { id, password, email, username } = req.body;
-      if (super.CheckBlank(id, password, email, username)) {
-        return super.Response(res, 400, "빈칸을 모두 입력해 주세요.");
-      }
-      if (RegExp.SignUp(id, password, username, email)) {
-        return super.Response(res, 400, "올바른 형식이 아닙니다.");
-      }
-      let result = await User.create({
-        id: id,
-        password: password,
-        email: email,
-        username: username,
-      });
-      console.log(result.success, result.mes);
-      if (result.success) {
-        return super.Response(res, 200, "회원가입 성공", {
-          mes: result.mes,
-          success: true,
-        });
-      } else {
-        return super.Response(res, 400, "회원가입 실패", { mes: result.mes });
-      }
     } catch (e) {
       return next(e);
     }
