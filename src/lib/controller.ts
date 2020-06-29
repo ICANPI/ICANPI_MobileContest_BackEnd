@@ -26,6 +26,13 @@ class Controller {
       return false;
     }
   }
+  public clone(obj) {
+    var output = [];
+    for (var i in obj) {
+      output[i] = obj[i];
+    }
+    return output;
+  }
 }
 
 export default Controller;
