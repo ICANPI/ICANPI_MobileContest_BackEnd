@@ -4,7 +4,8 @@ import Controller from "../../lib/controller";
 import RegExp from "../../lib/regExp";
 import User from "../../model/user";
 import * as jwt from "jsonwebtoken";
-
+import Token from "../../model/token";
+import * as moment from "moment";
 class AuthController extends Controller {
   constructor() {
     super();
@@ -49,18 +50,26 @@ class AuthController extends Controller {
       if (RegExp.SignIn(id, password)) {
         return super.Response(res, 400, "올바른 형식이 아닙니다.");
       }
-
       User.findOne({ id: id }, (err, result) => {
         if (err) throw err;
         if (result != null) {
           bcrypt.compare(password, result.password, async (err, value) => {
             if (value == true) {
-              const token = await User.getToken(result);
-              console.log(token);
+              console.log("aa", result.email);
+              const accessToken = await Token.create(
+                result.email,
+                "accessToken"
+              );
+              const refreshToken = await Token.create(
+                result.email,
+                "refreshToken"
+              );
+              console.log("taemin", accessToken, refreshToken);
               ++result.loginCount;
               await result.save();
               return super.Response(res, 200, "로그인에 성공했습니다", {
-                token: token,
+                accessToken: accessToken.token,
+                refreshToken: refreshToken.token,
                 success: true,
               });
             } else {
@@ -69,6 +78,50 @@ class AuthController extends Controller {
           });
         } else {
           return super.Response(res, 400, "아이디가 존재하지 않습니다");
+        }
+      });
+    } catch (e) {
+      return next(e);
+    }
+  }
+  /**
+   * @swagger
+   * /auth/refresh:
+   *   post:
+   *     summary: access 토큰 갱신
+   *     tags:
+   *	     - Auth
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - in: header
+   *         name: Authorization
+   *         type: string
+   *         schema:
+   *           $ref: "#/definitions/Token"
+   *     responses:
+   *       200:
+   *         schema:
+   *           $ref: "#/definitions/ResponseRefresh"
+   */
+  public async Refresh(req: Request, res: Response, next: NextFunction) {
+    try {
+      let token = req.headers["authorization"].split("Bearer ")[1];
+      let decoded: any = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      //취소를 체크해야됨
+      Token.findOne({ token: token }, async (err, result) => {
+        if (err) throw err;
+        if (result != null) {
+          let accessToken = await Token.create(decoded.email, "accessToken");
+          if (result.revoked == false) {
+            return super.Response(res, 200, "리프레쉬 성공", {
+              accessToken: accessToken.token,
+            });
+          } else {
+            return super.Response(res, 400, "해당 토큰이 강제로 거부했습니다.");
+          }
+        } else {
+          return super.Response(res, 400, "관련된 토큰이 없습니다.");
         }
       });
     } catch (e) {
@@ -181,10 +234,15 @@ class AuthController extends Controller {
               responseTypeObject.username = element.username;
             }
           });
-          return super.Response(res, 200, "성공적으로 전달 되었습니다", {
-            data: responseTypeObject,
-            success: true,
-          });
+          return super.Response(
+            res,
+            200,
+            "유저 정보를 성공적으로 가져왔습니다",
+            {
+              data: responseTypeObject,
+              success: true,
+            }
+          );
         } else {
           return super.Response(res, 400, "아이디가 존재하지 않습니다");
         }
