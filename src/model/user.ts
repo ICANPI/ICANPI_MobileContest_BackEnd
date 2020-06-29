@@ -2,6 +2,7 @@ import { model, Schema, Model, Document } from "mongoose";
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt-nodejs";
 import * as moment from "moment";
+import * as Token from "./token";
 const userSchema = new Schema({
   id: {
     type: String,
@@ -31,11 +32,7 @@ const userSchema = new Schema({
     type: Number,
     required: true,
   },
-  sleep_time: {
-    type: Array,
-    required: true,
-  },
-  achievements: {
+  sleepTime: {
     type: Array,
     required: true,
   },
@@ -48,8 +45,7 @@ export interface IUser extends Document {
   lastLoginTime: string;
   createdTime: string;
   loginCount: string;
-  sleep_time: Array<any>;
-  achievements: Array<any>;
+  sleepTime: Array<any>;
 }
 export interface UserCreate {
   id: string;
@@ -70,26 +66,6 @@ export interface IUserDocument extends Model<UserDocument> {
   create(): Promise<Result>;
   loginAuthentication();
 }
-userSchema.statics.getToken = function (data: UserDocument): Promise<any> {
-  return new Promise(async function (resolve, reject) {
-    try {
-      console.log(data.email);
-      return resolve(
-        jwt.sign(
-          {
-            email: data.email,
-          },
-          process.env.JWT_SECRET_KEY || "USER_SECRET",
-          {
-            expiresIn: 100000000, //초
-          }
-        )
-      );
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
 
 userSchema.statics.create = async function (data: UserCreate): Promise<Result> {
   return new Promise(async function (resolve, reject) {
@@ -127,6 +103,7 @@ userSchema.statics.create = async function (data: UserCreate): Promise<Result> {
 };
 userSchema.statics.loginAuthentication = async function (data) {
   try {
+    console.log("test", data);
     let user = await this.findOne({ email: data.email });
     if (!user) {
       return { success: false, mes: "존재하지 않은 계정입니다." };
