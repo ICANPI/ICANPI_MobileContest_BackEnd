@@ -1,8 +1,6 @@
 {
   "type": "object",
-  "required": [
-    "data"
-  ],
+  "required": ["data"],
   "properties": {
     "data": {
       "type": "array"
@@ -11,7 +9,8 @@
   "example": {
     "status": 200,
     "message": "로그인에 성공했습니다",
-    "token": "토큰정보",
+    "accessToken": "accessToken(7일)",
+    "refreshToken": "refreshToken(30일)",
     "success": true
   }
 }
