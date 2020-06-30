@@ -12,4 +12,6 @@ if (env === "development") {
 module.exports = () =>
   mongoose.connect(mongoURL, {
     useFindAndModify: false,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
   });

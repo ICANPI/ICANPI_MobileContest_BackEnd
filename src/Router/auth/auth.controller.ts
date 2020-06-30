@@ -5,7 +5,7 @@ import RegExp from "../../lib/regExp";
 import User from "../../model/user";
 import * as jwt from "jsonwebtoken";
 import Token from "../../model/token";
-import Achievements from "../../model/Achievements";
+import Achievements from "../../model/achievements";
 class AuthController extends Controller {
   constructor() {
     super();

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Controller from "../../lib/controller";
 import User from "../../model/user";
-import Achievements from "../../model/Achievements";
+import Achievements from "../../model/achievements";
 
 import * as jwt from "jsonwebtoken";
 let moment = require("moment"); // require
