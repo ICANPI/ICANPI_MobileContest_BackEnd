@@ -207,9 +207,14 @@ class AuthController extends Controller {
             }
           );
 
-          return super.Response(res, 200, "성공적으로 업데이트 했습니다", {
-            success: true,
-          });
+          return super.Response(
+            res,
+            200,
+            "수면시간을 성공적으로 업데이트 했습니다",
+            {
+              success: true,
+            }
+          );
         }
       });
     } catch (e) {
@@ -326,9 +331,14 @@ class AuthController extends Controller {
           console.log("day", dataList.day);
           console.log("week", dataList.week);
           console.log("month", dataList.month);
-          return super.Response(res, 200, "성공적으로 업데이트 했습니다", {
-            data: dataList,
-          });
+          return super.Response(
+            res,
+            200,
+            "평균 수면시간을 성공적으로 가져왔습니다",
+            {
+              data: dataList,
+            }
+          );
         }
       });
     } catch (e) {

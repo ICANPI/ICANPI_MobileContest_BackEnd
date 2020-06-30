@@ -1,0 +1,63 @@
+{
+  "type": "object",
+  "required": ["data"],
+  "properties": {
+    "data": {
+      "type": "array"
+    }
+  },
+  "example": {
+    "status": 200,
+    "message": "업적을 성공적으로 가져왔습니다.",
+    "success": true,
+    "result": [
+      {
+        "category": "수면 시간",
+        "data": [
+          {
+            "date": 2,
+            "hours": 7,
+            "title": "2일 연속 7시간 이상 수면",
+            "value": true
+          },
+          {
+            "date": 4,
+            "hours": 7,
+            "title": "4일 연속 7시간 이상 수면",
+            "value": true
+          },
+          {
+            "date": 6,
+            "hours": 7,
+            "title": "6일 연속 7시간 이상 수면",
+            "value": true
+          },
+          {
+            "date": 8,
+            "hours": 7,
+            "title": "8일 연속 7시간 이상 수면",
+            "value": false
+          },
+          {
+            "date": 10,
+            "hours": 7,
+            "title": "10일 연속 7시간 이상 수면",
+            "value": false
+          },
+          {
+            "date": 12,
+            "hours": 7,
+            "title": "12일 연속 7시간 이상 수면",
+            "value": false
+          },
+          {
+            "date": 14,
+            "hours": 7,
+            "title": "14일 연속 7시간 이상 수면",
+            "value": false
+          }
+        ]
+      }
+    ]
+  }
+}

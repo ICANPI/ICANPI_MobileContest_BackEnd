@@ -104,9 +104,13 @@ achievementsSchema.statics.get = function (email: string): Promise<any> {
   return new Promise(async function (resolve, reject) {
     try {
       //이메일에 해당되는 업적 전체를 가져오면 됨
-      return resolve({
-        success: true,
-        mes: "성공적으로 호출 하였습니다",
+      Achievements.findOne({ owner: email }, async (err, result) => {
+        console.log(result);
+        return resolve({
+          success: true,
+          mes: "성공적으로 호출 하였습니다",
+          result: result.list,
+        });
       });
     } catch (e) {
       reject(e);

@@ -28,6 +28,7 @@ swaggerSpec.definitions.ResponseUpdateInfo = require("../Swagger/ResponseUpdateI
 swaggerSpec.definitions.ResponseRefresh = require("../Swagger/ResponseRefresh.model.json");
 swaggerSpec.definitions.RequestGetSleepTime = require("../Swagger/RequestGetSleepTime.model.json");
 swaggerSpec.definitions.ResponseGetSleepTime = require("../Swagger/ResponseGetSleepTime.model.json");
+swaggerSpec.definitions.ResponseGetAchievements = require("../Swagger/ResponseGetAchievements.model.json");
 swaggerSpec.definitions.Token = require("../Swagger/Token.model.json");
 
 export { swaggerSpec };
