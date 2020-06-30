@@ -113,7 +113,6 @@ class AuthController extends Controller {
       if (RegExp.SignUp(id, password, username, email)) {
         return super.Response(res, 400, "올바른 형식이 아닙니다.");
       }
-      await Achievements.create(email);
       let result = await User.create({
         id: id,
         password: password,
@@ -122,6 +121,8 @@ class AuthController extends Controller {
       });
       console.log(result.success, result.mes);
       if (result.success) {
+        await Achievements.create(email);
+
         return super.Response(res, 200, "회원가입 성공", {
           mes: result.mes,
           success: true,
