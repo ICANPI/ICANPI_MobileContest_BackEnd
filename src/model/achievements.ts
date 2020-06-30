@@ -29,6 +29,7 @@ export interface AchievementsDocument extends Document, IAchievements {}
 export interface IAchievementsDocument extends Model<AchievementsDocument> {
   create();
   get();
+  update();
 }
 achievementsSchema.statics.create = function (email: string): Promise<any> {
   return new Promise(async function (resolve, reject) {
@@ -122,9 +123,47 @@ achievementsSchema.statics.update = function (
   return new Promise(async function (resolve, reject) {
     try {
       //해당되는 업적의 이름을 통해 그 업적을 업데이트 시키면 됨
-      return resolve({
-        success: true,
-        mes: "업데이트를 성공 하였습니다",
+      console.log("잘들어옴", category, title, email, state);
+      Achievements.findOne({ owner: email }, async (err, result) => {
+        if (err) throw err;
+        if (result != null) {
+          result.list.forEach((element, index1) => {
+            if (element.category == category) {
+              console.log("카테고리 찾음");
+              element.data.forEach((element, index2) => {
+                console.log("for문 들어감", element);
+                if (element.title == title) {
+                  console.log("찾음", result.list[index1].data[index2]);
+                  result.list[index1].data[index2].value = state;
+                  console.log(
+                    "바뀜",
+                    result.list[index1].data[index2].title,
+                    result.list[index1].data[index2].value
+                  );
+                }
+              });
+            }
+          });
+          console.log("데이터 Save", result.list[0].data);
+
+          await result.save();
+          Achievements.findOneAndUpdate(
+            { owner: email },
+            {
+              $set: {
+                list: result.list,
+              },
+            },
+            { new: true }
+          ).exec(function (err, r) {
+            console.log(r);
+          });
+
+          return resolve({
+            success: true,
+            mes: "업데이트를 성공 하였습니다",
+          });
+        }
       });
     } catch (e) {
       reject(e);
@@ -132,7 +171,7 @@ achievementsSchema.statics.update = function (
   });
 };
 const Achievements: Model<IAchievementsDocument> = model(
-  "achievements",
+  "Achievements",
   achievementsSchema
 ) as IAchievementsDocument;
 export default Achievements;

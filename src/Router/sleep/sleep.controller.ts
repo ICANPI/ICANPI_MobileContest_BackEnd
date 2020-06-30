@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Controller from "../../lib/controller";
 import User from "../../model/user";
-import Achievements from "../../model/achievements";
+import Achievements from "../../model/Achievements";
 
 import * as jwt from "jsonwebtoken";
 let moment = require("moment"); // require
@@ -138,9 +138,74 @@ class AuthController extends Controller {
             }
             nowDay.subtract(1, "days");
           }
-          console.log(number);
           // 갯수를 구했으니 수면시간 업적을 업데이트 해줘야한다
-          // Achievements.update("수면 시간","title",decoded.email,true)
+
+          Achievements.findOne(
+            { owner: decoded.email },
+            async (err, result) => {
+              if (err) throw err;
+              if (result != null) {
+                console.log("두영이머머리", number);
+                if (number >= 2) {
+                  await Achievements.update(
+                    "수면 시간",
+                    "2일 연속 7시간 이상 수면",
+                    decoded.email,
+                    true
+                  );
+                  console.log("2222");
+                }
+                if (number >= 4) {
+                  await Achievements.update(
+                    "수면 시간",
+                    "4일 연속 7시간 이상 수면",
+                    decoded.email,
+                    true
+                  );
+                }
+                if (number >= 6) {
+                  await Achievements.update(
+                    "수면 시간",
+                    "6일 연속 7시간 이상 수면",
+                    decoded.email,
+                    true
+                  );
+                }
+                if (number >= 8) {
+                  await Achievements.update(
+                    "수면 시간",
+                    "8일 연속 7시간 이상 수면",
+                    decoded.email,
+                    true
+                  );
+                }
+                if (number >= 10) {
+                  await Achievements.update(
+                    "수면 시간",
+                    "10일 연속 7시간 이상 수면",
+                    decoded.email,
+                    true
+                  );
+                }
+                if (number >= 12) {
+                  await Achievements.update(
+                    "수면 시간",
+                    "12일 연속 7시간 이상 수면",
+                    decoded.email,
+                    true
+                  );
+                }
+                if (number >= 14) {
+                  await Achievements.update(
+                    "수면 시간",
+                    "14일 연속 7시간 이상 수면",
+                    decoded.email,
+                    true
+                  );
+                }
+              }
+            }
+          );
 
           return super.Response(res, 200, "성공적으로 업데이트 했습니다", {
             success: true,
@@ -219,7 +284,6 @@ class AuthController extends Controller {
               }
             }
             if (type.indexOf("week") != -1) {
-              //고쳐야됨
               if (
                 element.data.year == yearNumber &&
                 moment(element.day).week() == moment(date).week()
@@ -246,7 +310,6 @@ class AuthController extends Controller {
             dataList.day = "00:00:00";
           }
           if (secondNumber != 0) {
-            console.log("secondNumber", seconds, secondNumber);
             dataList.week = moment
               .utc((seconds / secondNumber) * 1000)
               .format("HH:mm:ss"); //수정해야됨
@@ -254,7 +317,6 @@ class AuthController extends Controller {
             dataList.week = "00:00:00";
           }
           if (monthSecondNumber != 0) {
-            console.log("secondNumber2", monthSeconds, monthSecondNumber);
             dataList.month = moment
               .utc((monthSeconds / monthSecondNumber) * 1000)
               .format("HH:mm:ss"); //수정해야됨
