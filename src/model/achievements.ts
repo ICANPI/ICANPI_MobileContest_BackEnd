@@ -88,7 +88,6 @@ achievementsSchema.statics.create = function (email: string): Promise<any> {
         ],
       });
       achievements.save().then((data) => {
-        console.log("데이터 생성", data);
         return resolve({
           success: true,
           mes: "업적을 생성 하였습니다",
@@ -105,7 +104,6 @@ achievementsSchema.statics.get = function (email: string): Promise<any> {
     try {
       //이메일에 해당되는 업적 전체를 가져오면 됨
       Achievements.findOne({ owner: email }, async (err, result) => {
-        console.log(result);
         return resolve({
           success: true,
           mes: "성공적으로 호출 하였습니다",
@@ -127,29 +125,18 @@ achievementsSchema.statics.update = function (
   return new Promise(async function (resolve, reject) {
     try {
       //해당되는 업적의 이름을 통해 그 업적을 업데이트 시키면 됨
-      console.log("잘들어옴", category, title, email, state);
       Achievements.findOne({ owner: email }, async (err, result) => {
         if (err) throw err;
         if (result != null) {
           result.list.forEach((element, index1) => {
             if (element.category == category) {
-              console.log("카테고리 찾음");
               element.data.forEach((element, index2) => {
-                console.log("for문 들어감", element);
                 if (element.title == title) {
-                  console.log("찾음", result.list[index1].data[index2]);
                   result.list[index1].data[index2].value = state;
-                  console.log(
-                    "바뀜",
-                    result.list[index1].data[index2].title,
-                    result.list[index1].data[index2].value
-                  );
                 }
               });
             }
           });
-          console.log("데이터 Save", result.list[0].data);
-
           await result.save();
           Achievements.findOneAndUpdate(
             { owner: email },

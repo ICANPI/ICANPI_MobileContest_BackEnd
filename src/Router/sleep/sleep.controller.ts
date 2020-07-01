@@ -43,9 +43,7 @@ class AuthController extends Controller {
         req.headers["authorization"].split("Bearer ")[1],
         process.env.JWT_SECRET_KEY
       );
-      console.log(day, time);
       let sleepTime = moment(`${day} ${time}`);
-      console.log("체크", sleepTime.format("YYYY-MM-DD"));
       User.findOne({ email: decoded.email }, (err, result) => {
         if (err) throw err;
         if (result != null) {
@@ -53,11 +51,8 @@ class AuthController extends Controller {
           let bol = 0;
 
           if (result.sleepTime.length > 0) {
-            console.log("원래있음");
             timeArray = result.sleepTime.map(function (e) {
-              console.log(e.day, sleepTime.format("YYYY-MM-DD"));
               if (e.day == sleepTime.format("YYYY-MM-DD")) {
-                console.log("같음");
                 return {
                   day: sleepTime.format("YYYY-MM-DD"),
                   data: {
@@ -70,13 +65,11 @@ class AuthController extends Controller {
                   },
                 };
               } else {
-                console.log("다름");
                 bol++;
                 return e;
               }
             });
             if (bol == result.sleepTime.length) {
-              console.log("중복 날짜가 없었음");
               timeArray.push({
                 day: sleepTime.format("YYYY-MM-DD"),
                 data: {
@@ -112,23 +105,16 @@ class AuthController extends Controller {
             // 체크하는 범위
             result.sleepTime.forEach((element) => {
               //일을 하나 꺼냄
-              console.log(
-                element.day,
-                nowDay.format("YYYY-MM-DD"),
-                element.data.hours
-              );
               if (
                 i == 0 &&
                 element.day == nowDay.format("YYYY-MM-DD") &&
                 element.data.hours >= 7
               ) {
-                console.log("7이상", nowDay.format("YYYY-MM-DD"));
                 number++;
               } else if (
                 element.day == nowDay.format("YYYY-MM-DD") &&
                 element.data.hours >= 7
               ) {
-                console.log("7이상", nowDay.format("YYYY-MM-DD"));
                 number++;
               }
             });
@@ -145,7 +131,6 @@ class AuthController extends Controller {
             async (err, result) => {
               if (err) throw err;
               if (result != null) {
-                console.log("두영이머머리", number);
                 if (number >= 2) {
                   await Achievements.update(
                     "수면 시간",
@@ -153,7 +138,6 @@ class AuthController extends Controller {
                     decoded.email,
                     true
                   );
-                  console.log("2222");
                 }
                 if (number >= 4) {
                   await Achievements.update(
@@ -254,7 +238,6 @@ class AuthController extends Controller {
         req.headers["authorization"].split("Bearer ")[1],
         process.env.JWT_SECRET_KEY
       );
-      console.log(type.day, type.week, type.month);
       let dataList: any = {};
       let yearNumber: number = moment(date).year();
       let monthNumber: number = moment(date).month() + 1;
@@ -328,9 +311,6 @@ class AuthController extends Controller {
           } else if (type.indexOf("month") != -1) {
             dataList.month = "00:00:00";
           }
-          console.log("day", dataList.day);
-          console.log("week", dataList.week);
-          console.log("month", dataList.month);
           return super.Response(
             res,
             200,

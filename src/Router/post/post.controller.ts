@@ -47,7 +47,6 @@ class AuthController extends Controller {
         email: decoded.email,
       });
 
-      console.log(result.success, result._id);
       if (result.success) {
         return super.Response(
           res,
@@ -83,9 +82,7 @@ class AuthController extends Controller {
     try {
       let result = await Post.get();
 
-      console.log(result.success, result._id);
       if (result.success) {
-        console.log(result.data);
         return super.Response(
           res,
           200,

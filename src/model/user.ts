@@ -77,7 +77,6 @@ userSchema.statics.create = async function (data: UserCreate): Promise<Result> {
         return resolve({ success: false, mes: "아이디 중복" });
       }
 
-      console.log("실행");
       let now = moment();
       let createdTime = now.format("YYYY-MM-DD HH:mm:ss");
       bcrypt.hash(data.password, null, null, async function (err, hash) {
@@ -103,7 +102,6 @@ userSchema.statics.create = async function (data: UserCreate): Promise<Result> {
 };
 userSchema.statics.loginAuthentication = async function (data) {
   try {
-    console.log("test", data);
     let user = await this.findOne({ email: data.email });
     if (!user) {
       return { success: false, mes: "존재하지 않은 계정입니다." };
@@ -111,7 +109,6 @@ userSchema.statics.loginAuthentication = async function (data) {
       let now: Date = new Date();
       user.lastLoginTime = now;
       await user.save();
-      console.log("인증성공");
       return { success: true, mes: "인증 성공" };
     }
   } catch (err) {

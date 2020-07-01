@@ -55,7 +55,6 @@ class AuthController extends Controller {
         if (result != null) {
           bcrypt.compare(password, result.password, async (err, value) => {
             if (value == true) {
-              console.log("aa", result.email);
               const accessToken = await Token.create(
                 result.email,
                 "accessToken"
@@ -64,7 +63,6 @@ class AuthController extends Controller {
                 result.email,
                 "refreshToken"
               );
-              console.log("taemin", accessToken, refreshToken);
               ++result.loginCount;
               await result.save();
               return super.Response(res, 200, "로그인에 성공했습니다", {
@@ -119,7 +117,6 @@ class AuthController extends Controller {
         email: email,
         username: username,
       });
-      console.log(result.success, result.mes);
       if (result.success) {
         await Achievements.create(email);
 
@@ -304,7 +301,6 @@ class AuthController extends Controller {
             }
             result.id = text;
             await result.save();
-            console.log("아이디 변경 성공");
             return super.Response(res, 200, "성공적으로 업데이트 했습니다", {
               success: true,
             });
@@ -323,7 +319,6 @@ class AuthController extends Controller {
                 bcrypt.hash(text, null, null, (err, hash) => {
                   result.password = hash;
                   result.save();
-                  console.log("비밀번호 변경 성공~~~~");
                   return super.Response(
                     res,
                     200,
@@ -348,7 +343,6 @@ class AuthController extends Controller {
             }
             result.username = text;
             result.save();
-            console.log("유저닉네임 변경 성공");
             return super.Response(res, 200, "성공적으로 업데이트 했습니다", {
               success: true,
             });
@@ -363,7 +357,6 @@ class AuthController extends Controller {
   }
   public Test(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log("test");
       return super.Response(res, 200, "테스트");
     } catch (e) {
       return next(e);

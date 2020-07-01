@@ -36,10 +36,8 @@ class TimeController extends Controller {
       //10:02:03
       let times1 = moment("2020-01-01 " + time1);
       let times2 = moment("2020-01-01 " + time2);
-      console.log(times1.format("YYYY-MM-DD"));
 
       times1.add(times2.hours(), "hours");
-      console.log(times1);
       times1.add(times2.minutes(), "minutes");
       times1.add(times2.seconds(), "seconds");
 
