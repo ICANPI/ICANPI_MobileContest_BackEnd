@@ -60,7 +60,7 @@ tokenSchema.statics.create = function (
           },
           process.env.JWT_SECRET_KEY || "USER_SECRET",
           {
-            expiresIn: 604800, //초  7일
+            expiresIn: 1209600, //초  14일
           }
         );
         // token DB 저장
