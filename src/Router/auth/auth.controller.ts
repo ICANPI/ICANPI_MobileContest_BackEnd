@@ -361,7 +361,6 @@ class AuthController extends Controller {
       return next(e);
     }
   }
-
   public Test(req: Request, res: Response, next: NextFunction) {
     try {
       console.log("test");

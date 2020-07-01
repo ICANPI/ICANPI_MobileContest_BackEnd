@@ -3,10 +3,6 @@ import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt-nodejs";
 import * as moment from "moment";
 const postSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
   text: {
     type: String,
     required: true,
@@ -15,7 +11,7 @@ const postSchema = new Schema({
     type: Number,
     required: true,
   },
-  like_users: {
+  likeUsers: {
     type: Array,
     required: true,
   },
@@ -23,25 +19,78 @@ const postSchema = new Schema({
     type: String,
     required: true,
   },
-  host_id: {
+  host_email: {
     type: String,
     required: true,
   },
 });
 export interface IPost extends Document {
-  title: string;
   text: string;
   like: number;
-  like_users: string[];
+  likeUsers: string[];
   createdTime: string;
-  host_id: string;
+  host_email: string;
 }
 export interface Result {
   mes: string;
   success: boolean;
+  data?: any;
+}
+export interface PostCreate {
+  title: string;
+  text: string;
+  email: string;
 }
 export interface PostDocument extends Document, IPost {}
-export interface IPostDocument extends Model<PostDocument> {}
-
-const User: Model<PostDocument> = model("User", postSchema) as IPostDocument;
-export default User;
+export interface IPostDocument extends Model<PostDocument> {
+  create();
+  get();
+  find();
+  like();
+  unlike();
+}
+postSchema.statics.create = async function (data: PostCreate): Promise<Result> {
+  return new Promise(async function (resolve, reject) {
+    try {
+      let now = moment();
+      let createdTime = now.format("YYYY-MM-DD HH:mm:ss");
+      const post: any = new Post({
+        title: data.title,
+        text: data.text,
+        like: 0,
+        likeUsers: [],
+        createdTime: createdTime,
+        host_email: data.email,
+      });
+      post.save().then((data) => {
+        return resolve({
+          success: true,
+          mes: "게시물을 성공적으로 업로드 하였습니다.",
+        });
+      });
+    } catch (err) {
+      return reject({ success: false, mes: "DB 오류." });
+    }
+  });
+};
+postSchema.statics.get = async function (data: PostCreate): Promise<Result> {
+  return new Promise(async function (resolve, reject) {
+    try {
+      Post.find({}, function (err, result) {
+        if (err) {
+          console.log(err);
+        }
+        var r = result.reverse();
+        return resolve({
+          success: true,
+          mes: "게시물을 성공적으로 가져왔습니다.",
+          data: r,
+        });
+      });
+    } catch (err) {
+      return reject({ success: false, mes: "DB 오류." });
+    }
+  });
+};
+const Post: Model<PostDocument> = model("Post", postSchema) as IPostDocument;
+export default Post;
