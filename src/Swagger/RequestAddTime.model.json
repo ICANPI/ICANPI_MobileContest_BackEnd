@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "required": [],
+  "properties": {
+    "time1": {
+      "type": "string"
+    },
+    "time2": {
+      "type": "string"
+    }
+  },
+  "example": {
+    "time1": "10:30:24",
+    "time2": "08:30:21"
+  }
+}

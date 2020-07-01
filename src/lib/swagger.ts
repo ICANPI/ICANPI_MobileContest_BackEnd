@@ -32,6 +32,8 @@ swaggerSpec.definitions.ResponseGetAchievements = require("../Swagger/ResponseGe
 swaggerSpec.definitions.RequestPost = require("../Swagger/RequestPost.model.json");
 swaggerSpec.definitions.ResponsePost = require("../Swagger/ResponsePost.model.json");
 swaggerSpec.definitions.ResponseGetPost = require("../Swagger/ResponseGetPost.model.json");
+swaggerSpec.definitions.RequestAddTime = require("../Swagger/RequestAddTime.model.json");
+swaggerSpec.definitions.ResponseAddTime = require("../Swagger/ResponseAddTime.model.json");
 
 swaggerSpec.definitions.Token = require("../Swagger/Token.model.json");
 

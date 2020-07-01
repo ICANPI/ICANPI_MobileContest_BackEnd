@@ -27,8 +27,8 @@ class Controller {
     }
   }
   public clone(obj) {
-    var output = [];
-    for (var i in obj) {
+    let output = [];
+    for (let i in obj) {
       output[i] = obj[i];
     }
     return output;
